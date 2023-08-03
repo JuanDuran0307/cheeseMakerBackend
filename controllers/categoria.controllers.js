@@ -1,5 +1,24 @@
 const Categoria  = require('../models/Categoria.js');  
 
+
+
+const getCategoria = async(req,res)=>{
+    const {desde, hasta} = req.query;
+    const query = {estado:true};
+    /* const categoria = await Categoria.find(query); */
+
+    const [total, categorias] = await Promise.all([
+        Categoria.countDocuments(query),
+        Categoria.find(query).skip(Number(desde)).limit(Number(hasta))
+    ]);
+    res.json({
+        total,
+        categorias
+    })
+} 
+
+
+
 const postCategoria = async(req, res ) => {
 
     const nombre = req.body.nombre.toUpperCase();
@@ -26,10 +45,34 @@ const postCategoria = async(req, res ) => {
 
     res.status(201).json(categoria);
 
+
+
+};
+const deleteCategoria = async(req,res)=>{
+    const {id} = req.params;
+    const categoria = await Categoria.findByIdAndUpdate(id,{estado:false});
+    res.json ("Borro",categoria);
+
+}
+
+const putCategoria = async(req,res)=>{
+    const {id} = req.params;
+
+    const { _id, ...rest}= req.body;
+    const categoria = await Categoria.findByIdAndUpdate(id, rest);
+
+    res.json({
+        msg:"Categoria Actualizada",
+        categoria : categoria
+    });
+    
 }
 
 
 module.exports = {
-    postCategoria
+    postCategoria,
+    getCategoria,
+    deleteCategoria,
+    putCategoria
  
 }

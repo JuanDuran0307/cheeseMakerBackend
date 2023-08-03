@@ -2,6 +2,7 @@ const { response, request } = require('express');
 //23.1 middleware validacion token en otras rutas (borrar usuario)
 const jwt = require('jsonwebtoken');
 const Usuario = require('../models/Usuario.js');
+const Categoria = require('../models/Categoria.js');
 
 
 const validateJWT = async(  req = request, res = response, next) => {
@@ -56,6 +57,39 @@ const validateJWT = async(  req = request, res = response, next) => {
             msg: 'Token no válido'
         })
     }
+
+
+
+    
+    try{
+        const {id}= req.params._id;
+        
+        const categoria = await Categoria.findById(id);
+        if( !categoria ) {
+            return res.status(401).json({
+                msg: 'Token no válido - categoria no existe DB'
+            })
+        } 
+
+         if ( !categoria.estado ) {
+            return res.status(401).json({
+                msg: 'Token no válido - categoria con estado: false'
+            })
+        } 
+        
+        
+        req.categoria = categoria; 
+        console.log("req categoria en validate",req.categoria);
+        next();
+        
+
+    } catch (error){
+        console.log(error)
+        res.status(401).json({
+            msg:"Token no es valido xddd"
+        });
+    }
+
 
 
 }

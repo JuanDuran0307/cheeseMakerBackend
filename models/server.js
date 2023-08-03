@@ -10,8 +10,9 @@ class Server {
 
         this.paths = {
             authPath:       '/api/auth',
-            categoriasPath: '/api/categorias',
+            categoriasPath: '/api/categoria',
             usuariosPath:   '/api/usuarios',
+            cheesesPath:    '/api/cheese',
         }
         /* this.usuariosPath = "/api/usuarios";
         this.authPath = "/api/auth"; */
@@ -42,6 +43,8 @@ class Server {
        this.app.use(this.paths.authPath, require('../routes/auth.routes.js'));
        this.app.use(this.paths.usuariosPath, require('../routes/usuario.routes.js'));
        this.app.use(this.paths.categoriasPath, require('../routes/categoria.routes.js'));
+
+       this.app.use(this.paths.cheesesPath, require('../routes/Cheese.routes.js'));
     }
 
     listen(){
