@@ -21,31 +21,20 @@ const getCheese = async(req,res)=>{
 
 const postCheese = async(req, res ) => {
 
-    const nombre = req.body.nombre.toUpperCase();
 
-    const cheeseDB = await Cheese.findOne({ nombre });
+    const {name,state,price,categoria,description}=req.body;
+
+
+    const data = {
+        name,state,price,categoria,description
+    }
+    
+    const cheeseDB = await Cheese.findOne({ name });
 
     if ( cheeseDB ) {
         return res.status(400).json({
             msg: `La cheese ${ cheeseDB.nombre }, ya existe`
         });
-    }
-
-    const name = req.boy.name.toUpperCase();
-    const cheeseCA = await Cheese.findOne({name})
-
-    if(cheeseCA){
-        return res.status(400).json({
-            msg: `La cheese ${ cheeseCA.name }, ya existe`
-        });
-    }
-   /*  console.log("usuario:",usuario); */
-    // Generar la data a guardar
-    const data = {
-        nombre,
-        usuario: req.usuario._id,
-        name,
-        categoria: req.categoria._id
     }
 
     
